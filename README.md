@@ -127,9 +127,9 @@ make backup        # Zálohuje databáze
 - Dashboard 3: http://localhost:5003
 
 ### Přes doménu (s SSL)
-- Dashboard 1: https://dashboard1.ppanchov-takserver.eu
-- Dashboard 2: https://dashboard2.ppanchov-takserver.eu
-- Dashboard 3: https://dashboard3.ppanchov-takserver.eu
+- Dashboard 1: https://dashboard1.tvoje.domena.xyz
+- Dashboard 2: https://dashboard2.tvoje.domena.xyz
+- Dashboard 3: https://dashboard3.tvoje.domena.xyz
 
 ---
 

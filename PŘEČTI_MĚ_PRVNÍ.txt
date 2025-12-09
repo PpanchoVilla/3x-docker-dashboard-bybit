@@ -1,0 +1,327 @@
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║    ✅ PROJEKT ÚSPĚŠNĚ PŘIPRAVEN                                ║
+║                                                                ║
+║    Bybit Multi-Dashboard - 3 Demo Dashboardy v Dockeru        ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+📋 SOUHRN PROVEDENÝCH ZMĚN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ 1. Dockerfile - Aktualizace na Python 3.12
+   └─ FROM python:3.12-bookworm
+   └─ Přidány: pybit, python-dotenv
+
+✅ 2. Config.py - Bybit Demo režim
+   └─ Nový parametr: DEMO_MODE
+   └─ API endpoint: api-demo.bybit.com
+   └─ Logika: testnet=False, demo=True
+
+✅ 3. Konfigurační soubory (3×)
+   └─ config/config1.json (Dashboard 1, port 5001, modrá)
+   └─ config/config2.json (Dashboard 2, port 5002, zelená)
+   └─ config/config3.json (Dashboard 3, port 5003, tyrkysová)
+
+✅ 4. Docker-compose.yaml
+   └─ 3 futuresboard služby
+   └─ Nginx reverse proxy
+   └─ Samostatné databáze (data1/, data2/, data3/)
+
+✅ 5. Nginx konfigurace
+   └─ SSL/TLS podpora
+   └─ Subdomény: dashboard1/2/3.ppanchov-takserver.eu
+   └─ HTTP → HTTPS redirect
+
+✅ 6. Dokumentace
+   └─ README.md - Přepsaný hlavní README
+   └─ QUICKSTART.md - Rychlý start (3 kroky)
+   └─ SETUP.md - Kompletní setup guide
+   └─ BYBIT_API_SETUP.md - Jak získat API klíče
+   └─ CHANGES.md - Souhrn změn
+
+✅ 7. Pomocné skripty
+   └─ start.sh - Automatické spuštění
+   └─ check-config.sh - Validace konfigurace
+   └─ Makefile - Make příkazy
+
+✅ 8. .gitignore
+   └─ Config soubory s API klíči
+   └─ Databáze
+   └─ SSL certifikáty
+
+
+📁 STRUKTURA PROJEKTU
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+futuresboard/
+├── config/
+│   ├── config1.json          ← Doplňte API klíče!
+│   ├── config2.json          ← Doplňte API klíče!
+│   ├── config3.json          ← Doplňte API klíče!
+│   └── config.json.example
+├── nginx/
+│   ├── nginx.conf            ← Reverse proxy
+│   └── ssl/
+│       └── README.md         ← SSL návod
+├── src/futuresboard/         ← Upravený zdrojový kód
+│   ├── config.py             ← +DEMO_MODE
+│   ├── app.py
+│   ├── scraper.py
+│   └── ...
+├── docker-compose.yaml       ← 3 služby + nginx
+├── Dockerfile                ← Python 3.12
+├── Makefile                  ← Make příkazy
+├── start.sh                  ← Spouštěč ⚡
+├── check-config.sh           ← Validace
+└── README.md                 ← Nový README
+
+
+🚀 JAK SPUSTIT (3 KROKY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1️⃣  Získejte Bybit Demo API klíče
+   
+   a) Přejděte na: https://testnet.bybit.com
+   b) API Management → Create New Key (3×)
+   c) Oprávnění: Read-Write + Contract
+   d) Uložte si API Key a Secret (3× různé klíče)
+   
+   📖 Detailní návod: BYBIT_API_SETUP.md
+
+
+2️⃣  Doplňte API klíče do config souborů
+
+   nano config/config1.json
+   nano config/config2.json
+   nano config/config3.json
+   
+   Změňte:
+   "API_KEY": "YOUR_BYBIT_API_KEY_1"     → váš skutečný klíč
+   "API_SECRET": "YOUR_BYBIT_API_SECRET_1" → váš skutečný secret
+
+
+3️⃣  Spusťte
+
+   ./start.sh
+   
+   nebo
+   
+   make install
+
+
+🎉 HOTOVO! Přístup:
+
+   Lokálně:
+   • http://localhost:5001  (Dashboard 1)
+   • http://localhost:5002  (Dashboard 2)
+   • http://localhost:5003  (Dashboard 3)
+
+   Přes doménu (po nastavení SSL):
+   • https://dashboard1.ppanchov-takserver.eu
+   • https://dashboard2.ppanchov-takserver.eu
+   • https://dashboard3.ppanchov-takserver.eu
+
+
+🔧 UŽITEČNÉ PŘÍKAZY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Kontrola konfigurace
+./check-config.sh
+make check
+
+# Spuštění
+./start.sh
+make start
+
+# Logy
+make logs          # všechny služby
+make logs-1        # Dashboard 1
+make logs-2        # Dashboard 2
+make logs-3        # Dashboard 3
+make logs-nginx    # Nginx
+
+# Status
+make status
+docker-compose ps
+
+# Restart
+make restart       # všechny
+make restart-1     # Dashboard 1
+make restart-2     # Dashboard 2
+make restart-3     # Dashboard 3
+
+# Zastavení
+make stop
+docker-compose down
+
+# Vyčištění
+make clean         # smaže databáze
+make clean-all     # smaže vše včetně obrazů
+
+# SSL certifikát
+make ssl           # testovací (self-signed)
+make ssl-prod      # produkční (Let's Encrypt)
+
+# Záloha
+make backup
+
+# Nápověda
+make help
+
+
+🌐 NASTAVENÍ PRO DOMÉNU (PRODUKCE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1️⃣  DNS konfigurace
+   
+   Nastavte A záznamy:
+   dashboard1.ppanchov-takserver.eu  →  IP_VAŠEHO_SERVERU
+   dashboard2.ppanchov-takserver.eu  →  IP_VAŠEHO_SERVERU
+   dashboard3.ppanchov-takserver.eu  →  IP_VAŠEHO_SERVERU
+
+
+2️⃣  SSL certifikát (Let's Encrypt)
+
+   sudo apt install certbot
+   
+   sudo certbot certonly --standalone \
+     -d dashboard1.ppanchov-takserver.eu \
+     -d dashboard2.ppanchov-takserver.eu \
+     -d dashboard3.ppanchov-takserver.eu
+   
+   sudo cp /etc/letsencrypt/live/dashboard1.ppanchov-takserver.eu/fullchain.pem nginx/ssl/
+   sudo cp /etc/letsencrypt/live/dashboard1.ppanchov-takserver.eu/privkey.pem nginx/ssl/
+   sudo chmod 644 nginx/ssl/*.pem
+
+
+3️⃣  Firewall
+
+   sudo ufw allow 80/tcp
+   sudo ufw allow 443/tcp
+   sudo ufw enable
+
+
+4️⃣  Spusťte
+
+   ./start.sh
+
+
+🔒 BEZPEČNOST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Používáme:
+   • Bybit DEMO API (api-demo.bybit.com)
+   • Virtuální peníze (fake USDT)
+   • Read-only API klíče (doporučeno)
+   • SSL/TLS šifrování
+   • Config soubory v .gitignore
+
+❌ NEPOUŽÍVÁME:
+   • Produkční API klíče
+   • Skutečné peníze
+   • Testnet (api-testnet.bybit.com)
+
+
+⚙️  KONFIGURACE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Každý config/configX.json obsahuje:
+
+{
+    "EXCHANGE": "bybit",           ← Bybit burza
+    "TEST_MODE": false,            ← Vypnuto (ne testnet)
+    "DEMO_MODE": true,             ← Zapnuto (demo režim)
+    "API_KEY": "...",              ← Váš Bybit Demo API klíč
+    "API_SECRET": "...",           ← Váš Bybit Demo Secret
+    "AUTO_SCRAPE_INTERVAL": 300,   ← 5 minut (60-3600)
+    "PORT": 5001,                  ← Port dashboardu
+    "CUSTOM": {
+        "NAVBAR_TITLE": "...",     ← Název dashboardu
+        "NAVBAR_BG": "bg-primary", ← Barva (bg-primary, bg-success, bg-info)
+        "PROJECTIONS": [...]       ← Projekce růstu
+    }
+}
+
+
+📊 FUNKCE DASHBOARDŮ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Každý dashboard zobrazuje:
+
+📈 Positions    - Aktuální pozice a P&L
+📊 History      - Historie obchodů
+💰 Account      - Stav účtu
+📉 Charts       - Grafy výkonnosti
+📅 Calendar     - Denní/měsíční přehledy
+🎯 Projections  - Projekce růstu
+
+
+🚨 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ Dashboard se nespustí
+   → make logs-1
+   → make check
+   → Zkontrolujte API klíče
+
+❌ "Invalid API Key"
+   → Používáte Demo API klíče? (z testnet.bybit.com)
+   → Je "DEMO_MODE": true v config.json?
+   → API klíč má Contract permissions?
+
+❌ SSL chyby
+   → make ssl  (vygeneruje testovací certifikát)
+
+❌ Port již používán
+   → make stop
+   → lsof -i :5001  (zjistí co běží na portu)
+
+
+📚 DOKUMENTACE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+README.md            - Hlavní přehled
+QUICKSTART.md        - Rychlý start v 3 krocích
+SETUP.md             - Kompletní setup guide
+BYBIT_API_SETUP.md   - Jak získat API klíče
+CHANGES.md           - Souhrn všech změn
+nginx/ssl/README.md  - SSL certifikáty
+
+
+🎯 CO DĚLAT TEĎ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Přečtěte si BYBIT_API_SETUP.md
+2. Vytvořte 3× Bybit Demo API klíče
+3. Doplňte klíče do config/config1.json, config2.json, config3.json
+4. Spusťte: ./start.sh
+5. Otevřete: http://localhost:5001
+
+
+💡 TIPY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Každý dashboard = samostatný Bybit demo účet
+• Můžete testovat různé strategie současně
+• Virtuální peníze = žádné riziko
+• Reálná tržní data
+• Auto-refresh každých 5 minut
+
+
+🔗 ODKAZY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Bybit Demo Trading:  https://testnet.bybit.com
+Bybit API Docs:      https://bybit-exchange.github.io/docs/v5/intro
+Original Project:    https://github.com/ecoppen/futuresboard
+
+
+════════════════════════════════════════════════════════════════
+
+✅ Projekt je připraven k nasazení!
+
+Další krok: Získejte Bybit Demo API klíče
+Viz: BYBIT_API_SETUP.md
+
+════════════════════════════════════════════════════════════════

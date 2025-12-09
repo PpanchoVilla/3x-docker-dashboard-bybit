@@ -1,0 +1,51 @@
+services:
+  futuresboard1:
+    build: .
+    container_name: bybit-dashboard-1
+    volumes:
+      - ./config/config1.json:/usr/src/futuresboard/config/config.json
+      - ./data1:/usr/src/futuresboard/data
+    ports:
+      - "5001:5001"
+    environment:
+      - CONFIG_FILE=/usr/src/futuresboard/config/config.json
+    restart: unless-stopped
+
+  futuresboard2:
+    build: .
+    container_name: bybit-dashboard-2
+    volumes:
+      - ./config/config2.json:/usr/src/futuresboard/config/config.json
+      - ./data2:/usr/src/futuresboard/data
+    ports:
+      - "5002:5002"
+    environment:
+      - CONFIG_FILE=/usr/src/futuresboard/config/config.json
+    restart: unless-stopped
+
+  futuresboard3:
+    build: .
+    container_name: bybit-dashboard-3
+    volumes:
+      - ./config/config3.json:/usr/src/futuresboard/config/config.json
+      - ./data3:/usr/src/futuresboard/data
+    ports:
+      - "5003:5003"
+    environment:
+      - CONFIG_FILE=/usr/src/futuresboard/config/config.json
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-reverse-proxy
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    ports:
+      - "9080:80"
+      - "9443:443"
+    depends_on:
+      - futuresboard1
+      - futuresboard2
+      - futuresboard3
+    restart: unless-stopped

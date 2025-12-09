@@ -1,0 +1,14 @@
+{
+    "EXCHANGE": "bybit",
+    "TEST_MODE": false,
+    "DEMO_MODE": true,
+    "API_KEY": "YOUR_BYBIT_DEMO_API_KEY",
+    "API_SECRET": "YOUR_BYBIT_DEMO_API_SECRET",
+    "AUTO_SCRAPE_INTERVAL": 300,
+    "PORT": 5003,
+    "CUSTOM": {
+        "NAVBAR_TITLE": "BiStrategy-BTC-ETH",
+        "NAVBAR_BG": "bg-info",
+        "PROJECTIONS": [1.003, 1.005, 1.01, 1.012]
+    }
+}

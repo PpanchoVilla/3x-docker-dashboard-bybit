@@ -1,0 +1,23 @@
+src/futuresboard.egg-info
+config/futures.db
+build
+.idea
+
+# Databáze
+data1/
+data2/
+data3/
+*.db
+*.db-journal
+
+# SSL Certifikáty
+nginx/ssl/*.pem
+nginx/ssl/*.key
+nginx/ssl/*.crt
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log

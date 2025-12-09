@@ -1,0 +1,14 @@
+{
+    "EXCHANGE": "bybit",
+    "TEST_MODE": false,
+    "DEMO_MODE": true,
+    "API_KEY": "YOUR_BYBIT_DEMO_API_KEY",
+    "API_SECRET": "YOUR_BYBIT_DEMO_API_SECRET",
+    "AUTO_SCRAPE_INTERVAL": 300,
+    "PORT": 5002,
+    "CUSTOM": {
+        "NAVBAR_TITLE": "TriStrategy-BTC-ETH-SOL",
+        "NAVBAR_BG": "bg-success",
+        "PROJECTIONS": [1.003, 1.005, 1.01, 1.012]
+    }
+}
